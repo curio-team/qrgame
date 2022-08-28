@@ -64,7 +64,6 @@ class QrController extends Controller
         }
 
         $ip = isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-        $ip = rand(1,10);
         $scans = $answer->scans ?? [];
         if(!in_array($ip, $scans))
         {

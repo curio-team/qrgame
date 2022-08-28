@@ -10,6 +10,6 @@
 <p>Deze QR-code ontploft in je gezicht!</p>
 <p> Dit kost jouw team <strong>-{{ $rand }}</strong> punten.</p>
 <br />
-<p>let op: iedere keer dat iemand deze code scant gaan er weer opnieuw punten af!</p>
+<p><strong>Let op:</strong> iedere keer dat iemand deze code scant gaan er weer opnieuw punten af!</p>
 
 @endsection

@@ -60,6 +60,7 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
+                position: relative;
             }
 
             @media only screen and (min-width: 769px)

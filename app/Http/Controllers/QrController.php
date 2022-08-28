@@ -26,12 +26,11 @@ class QrController extends Controller
         }
 
         //Check of het een vlagtype is
-        if($question->type == "flag") return $this->flag($team, $question, $answer);
-
-        //Check of vraag voor dit team nog niet is afgelopen 
-        if($answer->finished_at != null) return view('error')->with(compact('team'))->with('msg', 'Voor deze QR zijn al punten uitgegeven voor jullie team. Scan een andere code!');
-
-        if($question->type == "bomb")
+        if($question->type == "flag")
+        {
+            return $this->flag($team, $question, $answer);
+        }
+        elseif($question->type == "bomb")
         {
             $rand = rand(1,3);
             $answer->points = $answer->points - $rand;
@@ -40,15 +39,38 @@ class QrController extends Controller
         }
         elseif($question->type == "loot")
         {
-            return view('loot1')->with(compact('question'))->with(compact('team'));
+            //Check of vraag voor dit team nog niet is afgelopen 
+            if($answer->finished_at == null)
+            {
+                return view('loot1')->with(compact('question'))->with(compact('team'));
+            }
+            else
+            {
+                return view('loot2')->with(compact('answer'))->with(compact('team'))->with('stale', true);
+            }
         }
         elseif($question->type == "assignment")
         {
-            return view('assignment1')->with(compact('question'))->with(compact('team'));
+            if($answer->finished_at == null)
+            {
+                return view('assignment1')->with(compact('question'))->with(compact('team'));
+            }
+            else
+            {
+                return view('assignment1')->with(compact('question'))->with(compact('team'))->with('stale', true);
+            }
         }
         elseif($question->type == "question")
         {
-            return view('question1')->with(compact('question'))->with(compact('team'));
+            //Check of vraag voor dit team nog niet is afgelopen 
+            if($answer->finished_at == null)
+            {
+                return view('question1')->with(compact('question'))->with(compact('team'));
+            }
+            else
+            {
+                return view('question2')->with(compact('answer'))->with(compact('team'))->with(compact('question'))->with('stale', true);
+            }
         }
     }
 
@@ -96,14 +118,14 @@ class QrController extends Controller
         if(!$answer) return redirect('/qr/' . $question->slug);
 
         //Check of vraag voor dit team nog niet is afgelopen 
-        if($answer->finished_at != null) return view('error')->with(compact('team'))->with('msg', 'Voor deze QR zijn al punten uitgegeven voor jullie team. Scan een andere code!');
+        if($answer->finished_at != null) return redirect('/qr/' . $question->slug);
 
         $rand = rand(-3,5);
         
         $answer->points = $rand;
         $answer->finished_at = \Carbon\Carbon::now();
         $answer->save();
-        return view('loot2')->with(compact('answer'))->with(compact('rand'))->with(compact('team'));
+        return view('loot2')->with(compact('answer'))->with(compact('team'));
     }
 
     public function assignment(Request $request, $slug)
@@ -119,7 +141,7 @@ class QrController extends Controller
         if(!$answer) return redirect('/qr/' . $question->slug);
 
         //Check of vraag voor dit team nog niet is afgelopen 
-        if($answer->finished_at != null) return view('error')->with(compact('team'))->with('msg', 'Voor deze QR zijn al punten uitgegeven voor jullie team. Scan een andere code!');
+        if($answer->finished_at != null) return redirect('/qr/' . $question->slug);
         
         $answer->finished_at = \Carbon\Carbon::now();
         $answer->save();
@@ -140,7 +162,7 @@ class QrController extends Controller
         if(!$answer) return redirect('/qr/' . $question->slug);
 
         //Check of vraag voor dit team nog niet is afgelopen 
-        if($answer->finished_at != null) return view('error')->with(compact('team'))->with('msg', 'Voor deze QR zijn al punten uitgegeven voor jullie team. Scan een andere code!');
+        if($answer->finished_at != null) return redirect('/qr/' . $question->slug);
         
         $answer->answer_given = $answer_given;
         $answer->points = (strcasecmp($answer_given, $question->correct_answer) == 0) ? 2 : 0;

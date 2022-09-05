@@ -9,6 +9,10 @@ class Team extends Model
 {
     use HasFactory;
 
+    protected $casts = ['score' => 'integer'];
+    protected $appends = ['score'];
+
+
     public function game()
     {
         return $this->belongsTo(Game::class);

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\QrController;
+use App\Http\Controllers\LeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,6 @@ Route::group(['middleware' => 'teamlogin'], function () {
     Route::get('/question/{slug}/{answer_given}', [QrController::class, 'question']);
 
 });
+
+Route::get('/scores', [LeaderboardController::class, 'index']);
+Route::get('/scores/game/{game}', [LeaderboardController::class, 'show']);

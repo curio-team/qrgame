@@ -20,24 +20,23 @@ class LeaderboardController extends Controller
             return intval($b['score']) <=> intval($a['score']);
         });
 
-        $from = [$game->teams->min('score'), $game->teams->max('score')];
-        array_walk($teams, [$this, 'mapColor'], $from);
+        $fromHigh = $game->teams->count();
+        array_walk($teams, [$this, 'mapColor'], $fromHigh);
 
         return view('score_game')->with(compact('game'))->with(compact('teams'));
     }
 
-    public function mapColor(&$team, $key, $from) {
+    public function mapColor(&$team, $key, $fromLow) {
         $toLow = 95;
         $toHigh = 25;
-        $fromLow = $from[0];
-        $fromHigh = $from[1];
+        $fromHigh = 1;
 
         $fromRange = $fromHigh - $fromLow;
         $toRange = $toHigh - $toLow;
         $scaleFactor = $toRange / $fromRange;
     
         // Re-zero the value within the from range
-        $tmpValue = $team['score'] - $fromLow;
+        $tmpValue = ($key+1) - $fromLow;
         // Rescale the value to the to range
         $tmpValue *= $scaleFactor;
         // Re-zero back to the to range

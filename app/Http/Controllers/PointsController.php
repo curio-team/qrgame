@@ -28,6 +28,6 @@ class PointsController extends Controller
         $q->points = $request->points;
         $q->save();
         
-        return redirect('/points/add/game/' . $game->id);
+        // return redirect('/points/add/game/' . $game->id);
     }
 }

@@ -3,7 +3,7 @@
 @section('content')
 
     <h1>{{ $game->name }}</h1>
-    <p>Punten toevoegen</p>
+    <p>Punt toevoegen</p>
     <form action="/points/add/game/{{ $game->id }}/" style="font-size: 30px;" method="POST">
         @csrf
         <select name="team" style="font-size: 24px; width: 200px;">

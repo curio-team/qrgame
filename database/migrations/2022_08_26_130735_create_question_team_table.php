@@ -15,7 +15,7 @@ class CreateQuestionTeamTable extends Migration
     {
         Schema::create('question_team', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("question_id");
+            $table->foreignId("question_id")->nullable();
             $table->foreignId("team_id");
             $table->dateTime("started_at")->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->dateTime("finished_at")->nullable();

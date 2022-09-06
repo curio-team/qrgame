@@ -23,8 +23,13 @@ class Team extends Model
         return $this->belongsToMany(Question::class)->using(QuestionTeam::class)->withPivot('started_at', 'finished_at', 'points', 'answer_given', 'num_scans');
     }
 
+    public function answers()
+    {
+        return $this->hasMany(QuestionTeam::class);
+    }
+
     public function getScoreAttribute()
     {
-        return $this->questions()->sum('points');
+        return $this->answers()->sum('points');
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\QrController;
 use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\PointsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,7 @@ Route::group(['middleware' => 'teamlogin'], function () {
 
 Route::get('/scores', [LeaderboardController::class, 'index']);
 Route::get('/scores/game/{game}', [LeaderboardController::class, 'show']);
+
+Route::get('/points/add/', [PointsController::class, 'index']);
+Route::get('/points/add/game/{game}', [PointsController::class, 'show']);
+Route::post('/points/add/game/{game}', [PointsController::class, 'add']);

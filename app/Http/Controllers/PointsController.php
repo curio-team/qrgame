@@ -30,6 +30,6 @@ class PointsController extends Controller
         
         dd($q);
 
-        return redirect('/points/add/game/' . $game->id);
+        //return redirect('/points/add/game/' . $game->id);
     }
 }

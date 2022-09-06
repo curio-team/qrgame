@@ -27,9 +27,7 @@ class PointsController extends Controller
         $q->finished_at = $q->started_at;
         $q->points = $request->points;
         $q->save();
-        
-        dd($q);
-
-        //return redirect('/points/add/game/' . $game->id);
+    
+        return redirect('/points/add/game/' . $game->id);
     }
 }

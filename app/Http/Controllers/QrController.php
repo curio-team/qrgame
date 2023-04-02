@@ -25,17 +25,31 @@ class QrController extends Controller
             $answer = QuestionTeam::where('question_id', $question->id)->where('team_id', $team->id)->first();
         }
 
-        //Check of het een vlagtype is
         if($question->type == "flag")
         {
             return $this->flag($team, $question, $answer);
         }
         elseif($question->type == "bomb")
         {
+            if($request->session()->get('bomb', 0) > 6)
+            {
+                return view('bomb2')->with(compact('team'));
+            }
+
             $rand = rand(1,3);
             $answer->points = $answer->points - $rand;
             $answer->save();
-            return view('bomb')->with(compact('answer'))->with(compact('rand'))->with(compact('team'));
+
+            if($request->session()->has('bomb'))
+            {
+                $request->session()->increment('bomb');
+            }
+            else
+            {
+                $request->session()->put('bomb', 1);
+            }
+
+            return view('bomb1')->with(compact('answer'))->with(compact('rand'))->with(compact('team'));
         }
         elseif($question->type == "loot")
         {
@@ -85,7 +99,7 @@ class QrController extends Controller
             return view('flag2')->with(compact('answer'))->with(compact('team'));
         }
 
-        $ip = isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+        $ip = (isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : isset($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
         $scans = $answer->scans ?? [];
         if(!in_array($ip, $scans))
         {

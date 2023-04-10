@@ -108,7 +108,7 @@ class QrController extends Controller
         }
 
         // Check of er genoeg scans zijn gemaakt:
-        if(count($answer->scans) >= 5)
+        if(count($answer->scans) >= 3)
         {
             $answer->finished_at = \Carbon\Carbon::now();
             $answer->points = 5;

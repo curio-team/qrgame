@@ -6,7 +6,7 @@
 @section('content')
 
 <h1>Vlag-challenge</h1>
-<p>Verdien punten door minsten <strong>10 teamleden</strong> te verzamelen bij deze vlag binnen <strong>5 minuten</strong>. De teamleden moeten allemaal de QR van deze vlag scannen.</p>
+<p>Verdien punten door minsten <strong>3 teamleden</strong> te verzamelen bij deze vlag binnen <strong>5 minuten</strong>. De teamleden moeten allemaal de QR van deze vlag scannen.</p>
 
 <img src="/img/flag-open.png" alt="vlag" width="100" style="margin: 40px;" /></a>
 

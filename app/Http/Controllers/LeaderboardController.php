@@ -32,6 +32,9 @@ class LeaderboardController extends Controller
         $fromHigh = 1;
 
         $fromRange = $fromHigh - $fromLow;
+        if ($fromRange == 0) {
+            $fromRange = 1;
+        }
         $toRange = $toHigh - $toLow;
         $scaleFactor = $toRange / $fromRange;
     

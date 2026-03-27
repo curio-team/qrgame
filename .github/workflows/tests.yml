@@ -10,7 +10,10 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
-
+    env:
+      APP_ENV: testing
+      APP_KEY: "base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      
     services:
       database-mysql:
         image: mysql:8.0

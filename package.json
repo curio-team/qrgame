@@ -15,6 +15,7 @@
         "vite": "^8.0.0"
     },
     "dependencies": {
+        "@zxing/browser": "^0.1.5",
         "alpinejs": "^3.14.0",
         "laravel-echo": "^2.1.0",
         "pusher-js": "^8.4.0"

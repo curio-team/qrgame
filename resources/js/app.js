@@ -1,5 +1,6 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
+import { BrowserQRCodeReader } from '@zxing/browser';
 
 window.Alpine = Alpine;
 
@@ -369,6 +370,108 @@ Alpine.data('caseOpening', (resultPoints, resultRarity = 'common') => ({
 
     destroy() {
         if (this._anim) cancelAnimationFrame(this._anim);
+    }
+}));
+
+/**
+ * Home QR scanner
+ * Uses device camera and redirects to /qr/{slug} when a valid game code is detected.
+ */
+Alpine.data('homeScanner', () => ({
+    ready: false,
+    scanning: false,
+    status: 'Klaar om te scannen',
+    error: '',
+    redirecting: false,
+    reader: null,
+
+    init() {
+        setTimeout(() => {
+            this.ready = true;
+            this.startScanner();
+        }, 100);
+    },
+
+    async startScanner() {
+        this.error = '';
+        if (this.scanning || this.redirecting) return;
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            this.error = 'Je browser ondersteunt geen camera-scannen.';
+            return;
+        }
+
+        try {
+            this.reader = this.reader || new BrowserQRCodeReader();
+            this.scanning = true;
+            this.status = 'Camera starten...';
+
+            this.reader.decodeFromConstraints(
+                {
+                    audio: false,
+                    video: {
+                        facingMode: { ideal: 'environment' }
+                    }
+                },
+                this.$refs.scannerVideo,
+                (result) => {
+                    if (!result || this.redirecting) return;
+
+                    const target = this.resolveQrTarget(result.getText());
+                    if (!target) {
+                        this.status = 'QR gelezen, maar code is ongeldig';
+                        return;
+                    }
+
+                    this.redirecting = true;
+                    this.status = 'QR-code gevonden, openen...';
+                    this.stopScanner();
+                    window.location.assign(target);
+                }
+            );
+
+            this.status = 'Richt je camera op een QR-code';
+        } catch (e) {
+            this.scanning = false;
+            this.error = e?.message || 'Camera kon niet gestart worden.';
+        }
+    },
+
+    stopScanner() {
+        if (this.reader) {
+            this.reader.reset();
+        }
+        this.scanning = false;
+        if (!this.redirecting) {
+            this.status = 'Scanner gestopt';
+        }
+    },
+
+    resolveQrTarget(rawValue) {
+        const value = (rawValue || '').trim();
+        if (!value) return null;
+
+        if (/^[A-Za-z0-9_-]+$/.test(value)) {
+            return `/qr/${encodeURIComponent(value)}`;
+        }
+
+        try {
+            const parsed = new URL(value, window.location.origin);
+            const marker = '/qr/';
+            const pos = parsed.pathname.indexOf(marker);
+            if (pos === -1) return null;
+
+            const slug = parsed.pathname.substring(pos + marker.length).split('/')[0];
+            if (!slug) return null;
+
+            return `/qr/${encodeURIComponent(decodeURIComponent(slug))}`;
+        } catch {
+            return null;
+        }
+    },
+
+    destroy() {
+        this.stopScanner();
     }
 }));
 

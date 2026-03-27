@@ -423,10 +423,7 @@ Alpine.data('homeScanner', () => ({
                         return;
                     }
 
-                    this.redirecting = true;
-                    this.status = 'QR-code gevonden, openen...';
-                    this.stopScanner();
-                    window.location.assign(target);
+                    this.navigateToTarget(target);
                 }
             );
 
@@ -439,7 +436,11 @@ Alpine.data('homeScanner', () => ({
 
     stopScanner() {
         if (this.reader) {
-            this.reader.reset();
+            try {
+                this.reader.reset();
+            } catch {
+                // Scanner may already be disposed while leaving the page.
+            }
         }
         this.scanning = false;
         if (!this.redirecting) {
@@ -447,9 +448,55 @@ Alpine.data('homeScanner', () => ({
         }
     },
 
+    navigateToTarget(target) {
+        if (!target || this.redirecting) return;
+
+        this.redirecting = true;
+        this.status = 'QR-code gevonden, openen...';
+
+        // Navigate first so scanner cleanup cannot block page transition.
+        window.location.href = target;
+
+        // Fallbacks for mobile webviews that ignore the first navigation call.
+        setTimeout(() => {
+            if (window.location.pathname !== target) {
+                window.location.assign(target);
+            }
+        }, 250);
+
+        setTimeout(() => {
+            if (window.location.pathname !== target) {
+                window.location.replace(target);
+            }
+        }, 800);
+
+        this.stopScanner();
+    },
+
     resolveQrTarget(rawValue) {
         const value = (rawValue || '').trim();
         if (!value) return null;
+
+        const normalizeSlug = (candidate) => {
+            if (!candidate) return null;
+            try {
+                return encodeURIComponent(decodeURIComponent(candidate));
+            } catch {
+                return encodeURIComponent(candidate);
+            }
+        };
+
+        if (value.startsWith('/qr/')) {
+            const slug = value.slice(4).split('/')[0].split('?')[0];
+            const normalized = normalizeSlug(slug);
+            return normalized ? `/qr/${normalized}` : null;
+        }
+
+        if (value.startsWith('qr/')) {
+            const slug = value.slice(3).split('/')[0].split('?')[0];
+            const normalized = normalizeSlug(slug);
+            return normalized ? `/qr/${normalized}` : null;
+        }
 
         if (/^[A-Za-z0-9_-]+$/.test(value)) {
             return `/qr/${encodeURIComponent(value)}`;
@@ -464,7 +511,8 @@ Alpine.data('homeScanner', () => ({
             const slug = parsed.pathname.substring(pos + marker.length).split('/')[0];
             if (!slug) return null;
 
-            return `/qr/${encodeURIComponent(decodeURIComponent(slug))}`;
+            const normalized = normalizeSlug(slug);
+            return normalized ? `/qr/${normalized}` : null;
         } catch {
             return null;
         }

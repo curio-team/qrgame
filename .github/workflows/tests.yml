@@ -48,6 +48,9 @@ jobs:
       - name: Compile assets
         run: npm run build
 
+      - name: Setup app key
+        run: php artisan key:generate
+
       - name: Run Test suites
         run: php artisan test --env=ci
 

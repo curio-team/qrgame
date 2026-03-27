@@ -450,10 +450,11 @@ Alpine.data('homeScanner', () => ({
 
     navigateToTarget(target) {
         if (!target || this.redirecting) return;
-
+        console.log('Navigating to', target);
         this.redirecting = true;
         this.status = 'QR-code gevonden, openen...';
 
+        this.stopScanner();
         // Navigate first so scanner cleanup cannot block page transition.
         window.location.href = target;
 
@@ -470,7 +471,6 @@ Alpine.data('homeScanner', () => ({
             }
         }, 800);
 
-        this.stopScanner();
     },
 
     resolveQrTarget(rawValue) {

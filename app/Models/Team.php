@@ -9,7 +9,16 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $casts = ['score' => 'integer'];
+    protected $fillable = [
+        'game_id',
+        'name',
+        'code',
+    ];
+
+    protected $casts = [
+        'score' => 'integer',
+    ];
+
     protected $appends = ['score'];
 
 
@@ -20,7 +29,9 @@ class Team extends Model
 
     public function questions()
     {
-        return $this->belongsToMany(Question::class)->using(QuestionTeam::class)->withPivot('started_at', 'finished_at', 'points', 'answer_given', 'num_scans');
+        return $this->belongsToMany(Question::class)
+            ->using(QuestionTeam::class)
+            ->withPivot('started_at', 'finished_at', 'points', 'answer_given', 'scans');
     }
 
     public function answers()

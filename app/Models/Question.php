@@ -9,8 +9,20 @@ class Question extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'slug',
+        'type',
+        'text',
+        'answer_a',
+        'answer_b',
+        'answer_c',
+        'correct_answer',
+    ];
+
     public function teams()
     {
-        return $this->belongsToMany(Team::class)->using(QuestionTeam::class)->withPivot('started_at', 'finished_at', 'points', 'answer_given', 'num_scans');
+        return $this->belongsToMany(Team::class)
+            ->using(QuestionTeam::class)
+            ->withPivot('started_at', 'finished_at', 'points', 'answer_given', 'scans');
     }
 }

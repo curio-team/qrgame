@@ -9,6 +9,11 @@ class Game extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'is_open',
+    ];
+
     public function teams()
     {
         return $this->hasMany(Team::class);

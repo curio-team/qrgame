@@ -1,0 +1,486 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+ * QRGame — Enchanted Forest Theme
+ * Dark, magical, immersive. Mobile-first.
+ */
+
+/* Alpine.js cloaking */
+[x-cloak] { display: none !important; }
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /* Forest palette */
+    --color-forest-deep:    #0a0e14;
+    --color-forest-dark:    #0f1520;
+    --color-forest-card:    #141c28;
+    --color-forest-border:  #1e2d42;
+    --color-forest-light:   #c8d8e8;
+    --color-forest-muted:   #6b7f96;
+    --color-forest-green:   #22c55e;
+    --color-forest-glow:    #00ff9d;
+
+    /* Encounter rarity colors */
+    --color-rarity-common:    #6b7f96;
+    --color-rarity-rare:      #60a5fa;
+    --color-rarity-epic:      #a78bfa;
+    --color-rarity-cursed:    #f87171;
+    --color-rarity-legendary: #fbbf24;
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+body {
+    background-color: var(--color-forest-deep);
+    color: var(--color-forest-light);
+}
+
+/* =========================================================
+   Forest particle background
+   ========================================================= */
+.forest-particles {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34,197,94,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(96,165,250,0.04) 0%, transparent 60%);
+}
+
+/* =========================================================
+   Cards
+   ========================================================= */
+.game-card {
+    background-color: var(--color-forest-card);
+    border: 1px solid var(--color-forest-border);
+    border-radius: 1rem;
+}
+
+.game-card-glow {
+    box-shadow: 0 0 30px rgba(34,197,94,0.15);
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #fff;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px rgba(34,197,94,0.35);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid var(--color-forest-border);
+    color: var(--color-forest-muted);
+}
+
+.btn-ghost:hover {
+    border-color: rgba(34,197,94,0.4);
+    color: var(--color-forest-light);
+}
+
+/* =========================================================
+   Encounter reveal animations
+   ========================================================= */
+
+/* Common — simple pulse */
+@keyframes common-reveal {
+    0%   { opacity: 0; transform: scale(0.8); }
+    60%  { transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Rare — glow sweep */
+@keyframes rare-reveal {
+    0%   { opacity: 0; transform: scale(0.85) rotate(-3deg); }
+    50%  { transform: scale(1.1) rotate(1deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Epic — bounce crack */
+@keyframes epic-reveal {
+    0%   { opacity: 0; transform: scale(0) rotate(10deg); }
+    40%  { transform: scale(1.2) rotate(-3deg); }
+    70%  { transform: scale(0.95) rotate(1deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Cursed — shake + red flash */
+@keyframes cursed-reveal {
+    0%, 100% { transform: translateX(0); }
+    10%, 50%  { transform: translateX(-6px); }
+    30%, 70%  { transform: translateX(6px); }
+}
+
+/* Legendary — full radiance */
+@keyframes legendary-reveal {
+    0%   { opacity: 0; transform: scale(0.5); filter: brightness(3); }
+    40%  { transform: scale(1.15); filter: brightness(1.5); }
+    100% { opacity: 1; transform: scale(1); filter: brightness(1); }
+}
+
+/* Score count-up */
+@keyframes score-pop {
+    0%   { transform: scale(0.7); opacity: 0; }
+    60%  { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Bomb shake */
+@keyframes bomb-shake {
+    0%, 100% { transform: translate(0, 0) rotate(0); }
+    15%  { transform: translate(-4px, 2px) rotate(-2deg); }
+    30%  { transform: translate(4px, -2px) rotate(2deg); }
+    45%  { transform: translate(-6px, 4px) rotate(-3deg); }
+    60%  { transform: translate(6px, -4px) rotate(3deg); }
+    75%  { transform: translate(-3px, 3px) rotate(-1deg); }
+}
+
+/* Confetti burst */
+@keyframes confetti-fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+}
+
+/* Rank change slide */
+@keyframes rank-up {
+    0%   { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes rank-down {
+    0%   { transform: translateY(-20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Number count-up */
+@keyframes number-tick {
+    0%   { transform: translateY(100%); }
+    100% { transform: translateY(0); }
+}
+
+/* =========================================================
+   Rarity display classes
+   ========================================================= */
+.rarity-common    { color: var(--color-rarity-common); }
+.rarity-rare      { color: var(--color-rarity-rare); }
+.rarity-epic      { color: var(--color-rarity-epic); }
+.rarity-cursed    { color: var(--color-rarity-cursed); }
+.rarity-legendary { color: var(--color-rarity-legendary); }
+
+.rarity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.rarity-badge.common    { background: rgba(107,127,150,0.2); color: var(--color-rarity-common); }
+.rarity-badge.rare      { background: rgba(96,165,250,0.15); color: var(--color-rarity-rare); }
+.rarity-badge.epic      { background: rgba(167,139,250,0.15); color: var(--color-rarity-epic); }
+.rarity-badge.cursed    { background: rgba(248,113,113,0.15); color: var(--color-rarity-cursed); }
+.rarity-badge.legendary { background: rgba(251,191,36,0.15); color: var(--color-rarity-legendary); }
+
+/* Glow effects per rarity */
+.glow-rare      { box-shadow: 0 0 20px rgba(96,165,250,0.3); }
+.glow-epic      { box-shadow: 0 0 25px rgba(167,139,250,0.35); }
+.glow-cursed    { box-shadow: 0 0 20px rgba(248,113,113,0.4); }
+.glow-legendary { box-shadow: 0 0 40px rgba(251,191,36,0.5), 0 0 80px rgba(251,191,36,0.2); }
+
+/* =========================================================
+   Scoreboard styles
+   ========================================================= */
+.score-row {
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.score-row.rank-changed {
+    animation: rank-up 0.4s ease;
+}
+
+.score-number {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+/* Podium styles */
+.podium-1 { background: linear-gradient(135deg, rgba(251,191,36,0.15), transparent); border-color: rgba(251,191,36,0.4); }
+.podium-2 { background: linear-gradient(135deg, rgba(148,163,184,0.12), transparent); border-color: rgba(148,163,184,0.3); }
+.podium-3 { background: linear-gradient(135deg, rgba(205,127,50,0.12), transparent); border-color: rgba(205,127,50,0.3); }
+
+/* =========================================================
+   Challenge UI
+   ========================================================= */
+.challenge-timer-ring {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1s linear;
+}
+
+/* Tap timing zone */
+.timing-bar {
+    position: relative;
+    height: 40px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.timing-indicator {
+    position: absolute;
+    top: 0;
+    width: 6px;
+    height: 100%;
+    background: white;
+    border-radius: 3px;
+    animation: timing-sweep 2s linear infinite;
+}
+
+.timing-zone {
+    position: absolute;
+    top: 0;
+    background: rgba(34,197,94,0.4);
+    height: 100%;
+    border-radius: 20px;
+}
+
+@keyframes timing-sweep {
+    0%   { left: 0; }
+    100% { left: calc(100% - 6px); }
+}
+
+/* =========================================================
+   QR scan pulse animation
+   ========================================================= */
+.scan-pulse {
+    animation: scan-pulse-ring 1.5s ease-out infinite;
+}
+
+@keyframes scan-pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+    70%  { box-shadow: 0 0 0 20px rgba(34,197,94,0); }
+    100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+
+/* =========================================================
+   Coin shower
+   ========================================================= */
+.coin {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: coin-fall 1.5s ease-in forwards;
+}
+
+@keyframes coin-fall {
+    0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateY(120px) rotate(360deg); opacity: 0; }
+}
+
+/* =========================================================
+   Floating score indicator (+20, -10, etc.)
+   ========================================================= */
+.score-float {
+    animation: score-float-up 2s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes score-float-up {
+    0%   { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-60px); opacity: 0; }
+}
+
+/* =========================================================
+   Utilities
+   ========================================================= */
+.text-balance { text-wrap: balance; }
+
+.backdrop-forest {
+    backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(10, 14, 20, 0.7);
+}
+
+.border-forest { border-color: var(--color-forest-border); }
+.bg-forest-card { background-color: var(--color-forest-card); }
+.text-forest-muted { color: var(--color-forest-muted); }
+
+/* =========================================================
+   CSGO Case Opening Reel
+   ========================================================= */
+.case-reel-viewport {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 2px solid var(--color-forest-border);
+    background: var(--color-forest-dark);
+}
+
+/* Center pointer triangle */
+.case-reel-pointer {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 14px solid var(--color-forest-green);
+    z-index: 20;
+    filter: drop-shadow(0 0 6px rgba(34,197,94,0.6));
+}
+.case-reel-pointer-bottom {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 14px solid var(--color-forest-green);
+    z-index: 20;
+    filter: drop-shadow(0 0 6px rgba(34,197,94,0.6));
+}
+
+/* Center line */
+.case-reel-center-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: var(--color-forest-green);
+    opacity: 0.4;
+    z-index: 15;
+    pointer-events: none;
+}
+
+/* Reel strip container */
+.case-reel-strip {
+    display: flex;
+    will-change: transform;
+}
+
+/* Individual reel item */
+.case-reel-item {
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    transition: none;
+    position: relative;
+}
+
+.case-reel-item .reel-emoji {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.case-reel-item .reel-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.case-reel-item .reel-points {
+    font-size: 0.55rem;
+    font-weight: 700;
+    margin-top: 0.1rem;
+}
+
+/* Winner highlight glow */
+.case-reel-item.winner-reveal {
+    animation: winner-glow 0.6s ease-out forwards;
+}
+
+@keyframes winner-glow {
+    0%   { background: transparent; }
+    50%  { background: rgba(34,197,94,0.3); box-shadow: inset 0 0 30px rgba(34,197,94,0.2); }
+    100% { background: rgba(34,197,94,0.15); box-shadow: inset 0 0 20px rgba(34,197,94,0.1); }
+}
+
+/* Slowdown shimmer on viewport */
+.case-reel-viewport.slowdown {
+    border-color: rgba(167,139,250,0.5);
+    box-shadow: 0 0 30px rgba(167,139,250,0.2);
+}
+
+.case-reel-viewport.reveal {
+    border-color: var(--color-forest-green);
+    box-shadow: 0 0 40px rgba(34,197,94,0.4), 0 0 80px rgba(34,197,94,0.15);
+}
+
+/* Fade edges for depth */
+.case-reel-fade-left,
+.case-reel-fade-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60px;
+    z-index: 10;
+    pointer-events: none;
+}
+.case-reel-fade-left {
+    left: 0;
+    background: linear-gradient(to right, var(--color-forest-dark), transparent);
+}
+.case-reel-fade-right {
+    right: 0;
+    background: linear-gradient(to left, var(--color-forest-dark), transparent);
+}
+
+/* Result pop-in */
+@keyframes result-pop {
+    0%   { opacity: 0; transform: scale(0.5) translateY(20px); }
+    60%  { transform: scale(1.1) translateY(-5px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.case-result-reveal {
+    animation: result-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+

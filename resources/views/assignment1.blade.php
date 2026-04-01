@@ -7,11 +7,7 @@
 @section('content')
 <div class="w-full text-center space-y-6 relative" x-data="encounterReveal('rare')">
 
-    @if(isset($stale))
-    <div class="absolute inset-0 z-40 rounded-2xl flex items-center justify-center backdrop-forest">
-        <span class="text-2xl font-extrabold tracking-wider" style="color: var(--color-rarity-cursed);">🔒 CODE AL GESCAND</span>
-    </div>
-    @endif
+    @include('partials.stale')
 
     <div x-show="phase !== 'loading'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
         <div class="text-5xl mb-2">🔐</div>

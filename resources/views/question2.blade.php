@@ -7,11 +7,7 @@
 @section('content')
 <div class="w-full space-y-6 text-center relative" x-data="{ show: false{{ $answer->points > 0 ? ", showConfetti: true" : '' }} }" x-init="setTimeout(() => show = true, 100)">
 
-    @if(isset($stale))
-    <div class="absolute inset-0 z-40 rounded-2xl flex items-center justify-center backdrop-forest">
-        <span class="text-2xl font-extrabold tracking-wider" style="color: var(--color-rarity-cursed);">🔒 CODE AL GESCAND</span>
-    </div>
-    @endif
+    @include('partials.stale')
 
     {{-- Points result --}}
     <div x-show="show" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 scale-50" x-transition:enter-end="opacity-100 scale-100"

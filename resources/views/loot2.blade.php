@@ -8,11 +8,7 @@
 <div class="w-full text-center space-y-6 relative"
      x-data="caseOpening({{ $answer->points }}, {{ $answer->points >= 4 ? "'legendary'" : ($answer->points >= 2 ? "'epic'" : ($answer->points > 0 ? "'rare'" : "'cursed'")) }})">
 
-    @if(isset($stale))
-    <div class="absolute inset-0 z-40 rounded-2xl flex items-center justify-center backdrop-forest">
-        <span class="text-2xl font-extrabold tracking-wider" style="color: var(--color-rarity-cursed);">🔒 CODE AL GESCAND</span>
-    </div>
-    @endif
+    @include('partials.stale')
 
     {{-- Title --}}
     <div class="mb-2">

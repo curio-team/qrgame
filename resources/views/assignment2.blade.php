@@ -24,5 +24,9 @@
             <p class="text-sm" style="color: var(--color-forest-muted);">Leg het resultaat vast op foto of film en laat dat zien aan de jury, of doe de opdracht live bij de jury.</p>
         </div>
     </div>
+
+    <div x-show="show" x-transition:enter="transition ease-out duration-500 delay-600" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+        <a href="/" class="btn-ghost inline-flex px-6 py-3 rounded-xl text-sm">← Terug</a>
+    </div>
 </div>
 @endsection

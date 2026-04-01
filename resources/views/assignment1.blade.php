@@ -26,6 +26,10 @@
             <a href="/assignment/{{$question->slug}}" class="btn-primary text-lg py-4 px-8 rounded-xl inline-flex scan-pulse">
                 🔓 Onthul de Opdracht
             </a>
+
+            <div class="mt-4">
+                <a href="/" class="btn-ghost inline-flex px-6 py-3 rounded-xl text-sm">← Terug</a>
+            </div>
         </div>
     </div>
 

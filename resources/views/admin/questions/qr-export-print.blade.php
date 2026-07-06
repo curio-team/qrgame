@@ -14,7 +14,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(4, 1fr);
-            gap: 5mm;
+            gap: 2mm;
             page-break-after: always;
         }
         .page:last-child { page-break-after: auto; }
@@ -34,7 +34,7 @@
         .url { margin-top: 1mm; font-size: 8pt; color: #4b5563; word-break: break-all; }
         .hint {
             max-width: 190mm;
-            margin: 6mm auto;
+            margin: 3mm auto;
             font-size: 9pt;
             color: #374151;
             text-align: center;

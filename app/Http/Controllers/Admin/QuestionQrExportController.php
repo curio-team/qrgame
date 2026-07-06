@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use chillerlan\QRCode\Common\EccLevel;
 use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 use Illuminate\Http\Request;
 
 class QuestionQrExportController extends Controller
@@ -30,7 +32,8 @@ class QuestionQrExportController extends Controller
             ->orderBy('id')
             ->get(['id', 'slug', 'type', 'text']);
 
-        $qrCode = new QRCode();
+        $options = new QROptions(['eccLevel' => EccLevel::L]);
+        $qrCode = new QRCode($options);
         $questions->transform(function (Question $question) use ($qrCode) {
             $question->qr_svg = $qrCode->render(url('/qr/' . $question->slug));
 

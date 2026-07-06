@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuestionResource\Pages;
 use App\Models\Question;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
+use Illuminate\Database\Eloquent\Collection;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
@@ -121,6 +123,16 @@ class QuestionResource extends Resource
             ])
             ->bulkActions([
                 BulkActionGroup::make([
+                    BulkAction::make('printQr')
+                        ->label('Print QR Codes')
+                        ->icon('heroicon-o-printer')
+                        ->action(function (Collection $records, \Livewire\Component $livewire) {
+                            $url = route('admin.questions.qr-export.print', [
+                                'question_ids' => $records->pluck('id')->all(),
+                            ]);
+                            $livewire->js('window.open(' . json_encode($url) . ', "_blank")');
+                        })
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ]);

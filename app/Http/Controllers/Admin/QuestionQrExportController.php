@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 class QuestionQrExportController extends Controller
 {
+    private const DEFAULT_QR_PUBLIC_URL = 'https://qr.curio.codes';
+
     public function index()
     {
         $questions = Question::query()
@@ -33,13 +35,20 @@ class QuestionQrExportController extends Controller
             ->get(['id', 'slug', 'type', 'text']);
 
         $options = new QROptions(['eccLevel' => EccLevel::L]);
-        $qrCode = new QRCode($options);
-        $questions->transform(function (Question $question) use ($qrCode) {
-            $question->qr_svg = $qrCode->render(url('/qr/' . $question->slug));
+        $questions->transform(function (Question $question) use ($options) {
+            $question->qr_url = $this->questionQrUrl($question);
+            $question->qr_svg = (new QRCode($options))->render($question->qr_url);
 
             return $question;
         });
 
         return view('admin.questions.qr-export-print', compact('questions'));
+    }
+
+    private function questionQrUrl(Question $question): string
+    {
+        $baseUrl = rtrim((string) config('app.qr_public_url', self::DEFAULT_QR_PUBLIC_URL), '/');
+
+        return $baseUrl.'/qr/'.$question->slug;
     }
 }

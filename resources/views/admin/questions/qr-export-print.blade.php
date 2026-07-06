@@ -53,7 +53,7 @@
                 <article class="cell">
                     <div class="qr">{!! $question->qr_svg !!}</div>
                     <div class="slug">{{ $question->slug }}</div>
-                    <div class="url">{{ url('/qr/' . $question->slug) }}</div>
+                    <div class="url">{{ $question->qr_url }}</div>
                 </article>
             @endforeach
         </section>

@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'qr_public_url' => env('QR_PUBLIC_URL', 'https://qr.curio.codes'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

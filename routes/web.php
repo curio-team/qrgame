@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\QuestionQrExportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\QrController;
 use App\Http\Controllers\LeaderboardController;
@@ -36,3 +37,11 @@ Route::get('/scores/game/{game}', [LeaderboardController::class, 'show']);
 Route::get('/points/add/', [PointsController::class, 'index']);
 Route::get('/points/add/game/{game}', [PointsController::class, 'show']);
 Route::post('/points/add/game/{game}', [PointsController::class, 'add']);
+
+Route::middleware('auth')
+    ->prefix('admin/questions')
+    ->name('admin.questions.')
+    ->group(function () {
+        Route::get('/qr-export', [QuestionQrExportController::class, 'index'])->name('qr-export');
+        Route::get('/qr-export/print', [QuestionQrExportController::class, 'print'])->name('qr-export.print');
+    });

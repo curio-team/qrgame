@@ -55,7 +55,6 @@
                         <img src="{{ $question->qr_svg }}" alt="QR code for {{ $question->slug }}">
                     </div>
                     <div class="slug">{{ $question->slug }}</div>
-                    <div class="url">{{ $question->qr_url }}</div>
                 </article>
             @endforeach
         </section>

@@ -46,18 +46,19 @@
 </head>
 <body>
     <div class="hint">Use your browser print dialog and choose “Save as PDF”.</div>
-
-    @foreach ($questions->chunk(12) as $chunk)
-        <section class="page">
-            @foreach ($chunk as $question)
-                <article class="cell">
-                    <div class="qr">{!! $question->qr_svg !!}</div>
-                    <div class="slug">{{ $question->slug }}</div>
-                    <div class="url">{{ $question->qr_url }}</div>
-                </article>
-            @endforeach
-        </section>
-    @endforeach
+@foreach ($questions->chunk(12) as $chunk)
+    <section class="page">
+        @foreach ($chunk as $question)
+            <article class="cell">
+                <div class="qr">
+                    <img src="{{ $question->qr_svg }}" alt="QR code for {{ $question->slug }}">
+                </div>
+                <div class="slug">{{ $question->slug }}</div>
+                <div class="url">{{ $question->qr_url }}</div>
+            </article>
+        @endforeach
+    </section>
+@endforeach
 
     <script>
         window.addEventListener('load', () => window.print());

@@ -42,22 +42,23 @@
         @media print {
             .hint { display: none; }
         }
+        .qr img { width: 42mm; height: 42mm; display: block; }
     </style>
 </head>
 <body>
     <div class="hint">Use your browser print dialog and choose “Save as PDF”.</div>
-@foreach ($questions->chunk(12) as $chunk)
-    <section class="page">
-        @foreach ($chunk as $question)
-            <article class="cell">
-                <div class="qr">
-                    <img src="{{ $question->qr_svg }}" alt="QR code for {{ $question->slug }}">
-                </div>
-                <div class="slug">{{ $question->slug }}</div>
-                <div class="url">{{ $question->qr_url }}</div>
-            </article>
-        @endforeach
-    </section>
+    @foreach ($questions->chunk(12) as $chunk)
+        <section class="page">
+            @foreach ($chunk as $question)
+                <article class="cell">
+                    <div class="qr">
+                        <img src="{{ $question->qr_svg }}" alt="QR code for {{ $question->slug }}">
+                    </div>
+                    <div class="slug">{{ $question->slug }}</div>
+                    <div class="url">{{ $question->qr_url }}</div>
+                </article>
+            @endforeach
+        </section>
 @endforeach
 
     <script>

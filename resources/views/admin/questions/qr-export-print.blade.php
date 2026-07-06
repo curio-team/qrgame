@@ -25,7 +25,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 3mm;
+            padding: 1mm;
             text-align: center;
             overflow: hidden;
         }
